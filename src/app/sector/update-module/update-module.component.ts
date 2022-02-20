@@ -22,6 +22,7 @@ export class UpdateModuleComponent implements OnInit {
   constructor(private teacherService : TeacherService, private sectorComponent: SectorComponent) { }
 
   public updateModule(module: ModuleModel) : void {
+    this.teacherService.findTeacherById(module.moduleManager.id).subscribe((response) => this.sectorComponent.updateModuleToSector(module, response));
 
   }
 

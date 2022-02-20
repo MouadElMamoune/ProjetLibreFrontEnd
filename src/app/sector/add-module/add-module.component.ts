@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, Input, OnInit} from "@angular/core";
 import {ModuleModel} from "../module.model";
 import {TeacherModel} from "../../teacher/teacher.model";
 import {TeacherService} from "../../teacher/teacher.service";
@@ -17,6 +17,7 @@ export class AddModuleComponent implements OnInit {
   public module: ModuleModel = new ModuleModel();
   public teachers!: TeacherModel[];
   public sector!: SectorModel;
+  @Input() public level!: number;
 
   constructor(private teacherService: TeacherService, private sectorComponent: SectorComponent) { }
 
@@ -26,6 +27,7 @@ export class AddModuleComponent implements OnInit {
   }
 
   public addModule(module: ModuleModel) : void {
+    module.level = this.level;
     this.teacherService.findFullTimeTeacherById(module.moduleManager.id).subscribe((response) => this.sectorComponent.addModuleToSector(module, response));
     this.module = new ModuleModel();
     this.module.moduleManager = new TeacherModel();

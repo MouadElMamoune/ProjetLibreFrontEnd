@@ -1,5 +1,5 @@
 import {
-  Component, EventEmitter,
+  Component, EventEmitter, NgZone,
   OnInit
 } from "@angular/core";
 import {NavigationStart, Router} from "@angular/router";
@@ -17,26 +17,24 @@ import {TeacherModel} from "../teacher/teacher.model";
 })
 export class SectorComponent implements OnInit {
   private code!: string;
-  private level!: number;
+  public level!: number;
   public sector: SectorModel = new SectorModel();
   public actualModule!: ModuleModel;
   public actualSubject!: SubjectModel;
 
-  constructor(private router: Router, private sectorService: SectorService, private moduleService: ModuleService) { }
+  constructor(private router: Router, private sectorService: SectorService, private moduleService: ModuleService, private zone: NgZone) { }
 
   ngOnInit(): void {
     const array = this.router.url.split('/');
     this.code = array[2];
     this.level = Number(array[3]);
     this.getSectorByCode(this.code);
+    this.sector.sectorManager = new TeacherModel();
     this.router.events.subscribe(
       (event) =>
     {
       if (event instanceof NavigationStart) {
-        const array = this.router.url.split('/');
-        this.code = array[2];
-        this.level = Number(array[3]);
-        this.getSectorByCode(this.code);
+        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     } });
     this.actualSubject = new SubjectModel();
     this.actualSubject.teacher = new TeacherModel();
@@ -64,6 +62,15 @@ export class SectorComponent implements OnInit {
     subjects.push(subject);
     module.listSubject = subjects;
     this.moduleService.updateModule(module).subscribe();
+    this.getSectorByCode(this.code);
+  }
+
+  public updateModuleToSector(module: ModuleModel, teacher: TeacherModel) : void {
+    module.moduleManager = teacher;
+    let modules = this.sector.listModule.filter(x => x.id != module.id);
+    modules.push(module);
+    this.sector.listModule = modules;
+    this.sectorService.updateSector(this.sector).subscribe();
     this.getSectorByCode(this.code);
   }
 

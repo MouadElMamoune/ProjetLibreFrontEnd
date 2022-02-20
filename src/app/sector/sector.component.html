@@ -5,28 +5,41 @@
 <div class="idance">
   <div class="schedule content-block">
     <div class="container">
-      <h2 data-aos="zoom-in-up" class="aos-init aos-animate">Schedule</h2>
-
       <div class="timetable">
-
         <div class="tab-content container">
           <div class="tab-pane show active">
+            <div class="row">
+              <!-- Schedule Item 1 -->
+              <div class="col-md-10 ">
+                  <div class="timetable-item h-100 d-flex align-items-center justify-content-center">
+                    <div class="timetable-item-img">
+                      <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="Contemporary Dance">
+                    </div>
+                    <div class="timetable-item-main">
+                      <div class="timetable-item-time">{{ sector.sectorManager.firstName}} {{sector.sectorManager.lastName}}</div>
+                      <div class="timetable-item-name">Sector Manager</div>
+                    </div>
+                  </div>
+
+              </div>
+            </div>
+
             <div class="row" *ngFor="let module of sector.listModule">
               <!-- Schedule Item 1 -->
-              <div class="col-md-3">
+              <div class="col-md-3" *ngIf="module.level == level">
                 <div class="timetable-item h-100 d-flex align-items-center justify-content-cente">
                   <div class="timetable-item-img">
                     <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="Contemporary Dance">
                   </div>
                   <div class="timetable-item-main">
                     <div class="timetable-item-time">{{module.moduleManager.firstName }} {{module.moduleManager.lastName}}</div>
-                    <div class="timetable-item-name">Responsable module</div>
+                    <div class="timetable-item-name">Module Manager</div>
                     <a href="#" class="btn btn-primary btn-book">Contacter</a>
                   </div>
                 </div>
               </div>
 
-              <div class="col-md-3 ">
+              <div class="col-md-3 " *ngIf="module.level == level">
                 <div class="row timetable-item h-100 d-flex align-items-center justify-content-center">
                   <div>{{module.designation}}</div>
                   <div class="float-right btn-group btn-group-sm">
@@ -38,7 +51,7 @@
               </div>
 
               <!-- Schedule Item 2 -->
-              <div class="col-md-4">
+              <div class="col-md-4" *ngIf="module.level == level">
                 <div class="timetable-item h-100 ">
                   <div class="row col-md-12">
                     <div class="col-md-12" *ngFor="let subject of module.listSubject">
@@ -93,6 +106,6 @@
   </div>
 <div id="mycontainer"></div>
 <app-sector-add-subject></app-sector-add-subject>
-<app-sector-add-module></app-sector-add-module>
+<app-sector-add-module [level]="level"></app-sector-add-module>
 <app-sector-update-subject [subject]="actualSubject"></app-sector-update-subject>
 <app-sector-update-module [module]="actualModule"></app-sector-update-module>
